@@ -1,0 +1,23 @@
+[project]
+authors = ["dnth <dickson.neoh@gmail.com>"]
+channels = ["conda-forge"]
+name = "frame-finder-demo"
+platforms = ["linux-64"]
+version = "0.1.0"
+
+[tasks]
+# Install dependencies using npm with legacy peer deps
+install = "npm install --legacy-peer-deps"
+# Start the development server
+dev = "npm run dev"
+# Build the project for production
+build = "npm run build"
+# Start the production server
+start = "npm run start"
+# Run linting
+lint = "npm run lint"
+# Setup and run the project in one command
+setup-and-run = { depends-on = ["install", "dev"] }
+
+[dependencies]
+nodejs = ">=22.13.0,<22.14"
