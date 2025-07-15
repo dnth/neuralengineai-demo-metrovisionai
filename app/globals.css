@@ -12,6 +12,34 @@ body {
   }
 }
 
+/* Jeeliz VTO Widget Styles */
+.JeelizVTOWidget {
+  position: relative;
+}
+
+.JeelizVTOWidgetCanvas {
+  position: absolute;
+  z-index: 1;
+  left: 0;
+  right: 0;
+  margin: 0 auto;
+}
+
+.JeelizVTOWidgetControls {
+  position: absolute;
+  z-index: 2;
+}
+
+.JeelizVTOWidgetAdjustNotice {
+  z-index: 3;
+  display: none;
+}
+
+.JeelizVTOWidgetLoading {
+  z-index: 4;
+  cursor: wait;
+}
+
 @layer base {
   :root {
     --background: 0 0% 100%;

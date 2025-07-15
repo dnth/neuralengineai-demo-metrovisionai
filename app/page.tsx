@@ -5,6 +5,20 @@ import { Button } from "@/components/ui/button"
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
 import { Badge } from "@/components/ui/badge"
 import { Camera, Upload, MessageCircle, Sparkles, ShoppingCart, Star, ArrowLeft, ArrowRight } from "lucide-react"
+import dynamic from "next/dynamic"
+
+// Dynamically import VTOWidget with no SSR to prevent server-side rendering issues
+const VTOWidget = dynamic(() => import("@/components/VTOWidget"), {
+  ssr: false,
+  loading: () => (
+    <div className="aspect-[3/4] bg-gray-100 rounded-lg flex items-center justify-center">
+      <div className="text-center">
+        <div className="animate-spin w-8 h-8 border-2 border-blue-500 border-t-transparent rounded-full mx-auto mb-4"></div>
+        <p className="text-gray-600">Loading Virtual Try-On...</p>
+      </div>
+    </div>
+  )
+})
 
 // MOG Malaysia frame data
 const mockFrames = [
@@ -523,30 +537,14 @@ export default function FrameFinderDemo() {
         {currentStep === "tryOn" && selectedFrame && (
           <Card>
             <CardHeader>
-              <CardTitle className="flex items-center gap-2">👓 AR Try-On: {selectedFrame.name}</CardTitle>
+              <CardTitle className="flex items-center gap-2">👓 Live Virtual Try-On: {selectedFrame.name}</CardTitle>
             </CardHeader>
-            <CardContent className="space-y-4">
-              <div className="aspect-[3/4] bg-gray-100 rounded-lg relative overflow-hidden">
-                <img src={selfieImage || "/placeholder.svg"} alt="You" className="w-full h-full object-cover" />
-                <div className="absolute inset-0 flex items-center justify-center">
-                  <div className="bg-black/20 text-white px-3 py-1 rounded text-sm">
-                    AR Overlay: {selectedFrame.name}
-                  </div>
-                </div>
-                <div className="absolute top-4 right-4">
-                  <Badge className="bg-green-500">{selectedFrame.match}% Match</Badge>
-                </div>
-              </div>
-              <div className="flex gap-2">
-                <Button variant="outline" onClick={() => setCurrentStep("results")}>
-                  <ArrowLeft className="w-4 h-4 mr-2" />
-                  Back
-                </Button>
-                <Button onClick={addToCart} className="flex-1">
-                  <ShoppingCart className="w-4 h-4 mr-2" />
-                  Add to Cart - RM{selectedFrame.price}
-                </Button>
-              </div>
+            <CardContent>
+              <VTOWidget 
+                selectedFrame={selectedFrame}
+                onBack={() => setCurrentStep("results")}
+                onAddToCart={addToCart}
+              />
             </CardContent>
           </Card>
         )}
