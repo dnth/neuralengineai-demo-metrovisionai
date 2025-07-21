@@ -333,19 +333,19 @@ export default function FrameFinderDemo() {
   }
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-blue-50 to-purple-50 p-4">
-      <div className="max-w-md mx-auto">
+    <div className="min-h-screen p-4 md:p-8">
+      <div className="max-w-md md:max-w-4xl lg:max-w-6xl mx-auto">
         {/* Header */}
-        <div className="text-center mb-6">
-          <h1 className="text-2xl font-bold text-gray-800 mb-2">🕶️ Metro Vision AI</h1>
-          <p className="text-sm text-gray-600">AI-powered frame recommendations</p>
-          <div className="flex justify-center mt-4">
+        <div className="text-center mb-6 md:mb-12">
+          <h1 className="text-2xl md:text-4xl lg:text-5xl font-bold text-gray-800 mb-2 md:mb-4">🕶️ Metro Vision AI</h1>
+          <p className="text-sm md:text-lg text-gray-600 max-w-2xl mx-auto">AI-powered frame recommendations with virtual try-on technology</p>
+          <div className="flex justify-center mt-4 md:mt-8">
             {["selfie", "chat", "processing", "results", "tryOn", "checkout"].map((step, index) => (
               <div
                 key={step}
-                className={`w-3 h-3 rounded-full mx-1 ${
+                className={`w-3 h-3 md:w-4 md:h-4 rounded-full mx-1 md:mx-2 transition-colors duration-300 ${
                   ["selfie", "chat", "processing", "results", "tryOn", "checkout"].indexOf(currentStep) >= index
-                    ? "bg-blue-500"
+                    ? "bg-blue-500 shadow-lg"
                     : "bg-gray-300"
                 }`}
               />
@@ -355,7 +355,8 @@ export default function FrameFinderDemo() {
 
         {/* Step 1: Selfie Capture */}
         {currentStep === "selfie" && (
-          <Card>
+          <div className="grid grid-cols-1 lg:grid-cols-2 gap-8 items-center">
+            <Card className="order-2 lg:order-1">
             <CardHeader>
               <CardTitle className="flex items-center gap-2">
                 <Camera className="w-5 h-5" />
@@ -422,11 +423,55 @@ export default function FrameFinderDemo() {
               </p>
             </CardContent>
           </Card>
+          <div className="order-1 lg:order-2 hidden lg:block">
+            <div className="bg-white/50 backdrop-blur-sm rounded-2xl p-8 text-center">
+              <h2 className="text-2xl font-semibold text-gray-800 mb-4">How it works</h2>
+              <div className="space-y-6">
+                <div className="flex items-center gap-4">
+                  <div className="w-12 h-12 bg-blue-100 rounded-full flex items-center justify-center">
+                    <Camera className="w-6 h-6 text-blue-600" />
+                  </div>
+                  <div className="text-left">
+                    <h3 className="font-medium text-gray-800">Take a selfie</h3>
+                    <p className="text-sm text-gray-600">Or upload your photo</p>
+                  </div>
+                </div>
+                <div className="flex items-center gap-4">
+                  <div className="w-12 h-12 bg-purple-100 rounded-full flex items-center justify-center">
+                    <MessageCircle className="w-6 h-6 text-purple-600" />
+                  </div>
+                  <div className="text-left">
+                    <h3 className="font-medium text-gray-800">Share preferences</h3>
+                    <p className="text-sm text-gray-600">Tell us your style</p>
+                  </div>
+                </div>
+                <div className="flex items-center gap-4">
+                  <div className="w-12 h-12 bg-green-100 rounded-full flex items-center justify-center">
+                    <Sparkles className="w-6 h-6 text-green-600" />
+                  </div>
+                  <div className="text-left">
+                    <h3 className="font-medium text-gray-800">AI recommendations</h3>
+                    <p className="text-sm text-gray-600">Personalized matches</p>
+                  </div>
+                </div>
+                <div className="flex items-center gap-4">
+                  <div className="w-12 h-12 bg-orange-100 rounded-full flex items-center justify-center">
+                    <span className="text-orange-600 font-bold">👓</span>
+                  </div>
+                  <div className="text-left">
+                    <h3 className="font-medium text-gray-800">Virtual try-on</h3>
+                    <p className="text-sm text-gray-600">See how they look</p>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
         )}
 
         {/* Step 2: Chat Preferences */}
         {currentStep === "chat" && (
-          <Card>
+          <Card className="md:max-w-2xl md:mx-auto">
             <CardHeader>
               <CardTitle className="flex items-center gap-2">
                 <MessageCircle className="w-5 h-5" />
@@ -480,7 +525,7 @@ export default function FrameFinderDemo() {
 
         {/* Step 3: Processing */}
         {currentStep === "processing" && (
-          <Card>
+          <Card className="md:max-w-2xl md:mx-auto">
             <CardHeader>
               <CardTitle className="flex items-center gap-2">
                 <Sparkles className="w-5 h-5 animate-spin" />
@@ -509,42 +554,48 @@ export default function FrameFinderDemo() {
 
         {/* Step 4: Results */}
         {currentStep === "results" && (
-          <Card>
+          <Card className="md:max-w-none">
             <CardHeader>
-              <CardTitle className="flex items-center gap-2">🏆 Your Top Frames</CardTitle>
+              <CardTitle className="flex items-center gap-2 text-xl md:text-2xl">🏆 Your Top Frames</CardTitle>
             </CardHeader>
             <CardContent className="space-y-4">
-              <div className="grid gap-3">
+              <div className="grid gap-3 md:gap-4 md:grid-cols-2 lg:grid-cols-3">
                 {mockFrames.slice(0, 6).map((frame, index) => (
                   <div
                     key={frame.id}
-                    className="border rounded-lg p-3 cursor-pointer hover:bg-gray-50 transition-colors"
+                    className="border rounded-lg p-3 md:p-4 cursor-pointer hover:bg-gray-50 hover:shadow-md transition-all duration-200 group"
                     onClick={() => selectFrame(frame)}
                   >
-                    <div className="flex items-center gap-3">
+                    <div className="flex md:flex-col items-center md:items-start gap-3 md:gap-4">
                       <img
                         src={frame.image || "/placeholder.svg"}
                         alt={frame.name}
-                        className="w-16 h-12 object-cover rounded"
+                        className="w-16 h-12 md:w-full md:h-32 object-cover rounded flex-shrink-0"
                       />
-                      <div className="flex-1">
-                        <div className="flex items-center gap-2">
-                          <h3 className="font-medium">
+                      <div className="flex-1 md:w-full">
+                        <div className="flex items-center gap-2 mb-1 md:mb-2">
+                          <h3 className="font-medium text-sm md:text-base">
                             {index + 1}. {frame.name}
                           </h3>
-                          <Badge variant="secondary">{frame.match}% match</Badge>
+                          <Badge variant="secondary" className="text-xs">{frame.match}% match</Badge>
                         </div>
-                        <p className="text-sm text-gray-600">RM{frame.price}</p>
-                        <p className="text-xs text-gray-500">{frame.description}</p>
-                        <div className="flex gap-1 mt-1">
-                          {frame.features.slice(0, 2).map((feature, idx) => (
+                        <p className="text-sm md:text-base font-semibold text-gray-800 mb-1">RM{frame.price}</p>
+                        <p className="text-xs md:text-sm text-gray-500 line-clamp-2 md:line-clamp-3">{frame.description}</p>
+                        <div className="flex flex-wrap gap-1 mt-2">
+                          {frame.features.map((feature, idx) => (
                             <Badge key={idx} variant="outline" className="text-xs">
                               {feature}
                             </Badge>
                           ))}
                         </div>
                       </div>
-                      <ArrowRight className="w-4 h-4 text-gray-400" />
+                      <ArrowRight className="w-4 h-4 text-gray-400 md:hidden flex-shrink-0 group-hover:text-blue-500 transition-colors" />
+                    </div>
+                    <div className="hidden md:block mt-3 pt-3 border-t">
+                      <div className="flex items-center justify-between">
+                        <span className="text-sm text-gray-600">Try it on</span>
+                        <ArrowRight className="w-4 h-4 text-gray-400 group-hover:text-blue-500 transition-colors" />
+                      </div>
                     </div>
                   </div>
                 ))}
@@ -571,7 +622,8 @@ export default function FrameFinderDemo() {
 
         {/* Step 6: Checkout */}
         {currentStep === "checkout" && (
-          <Card>
+          <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
+          <Card className="lg:order-2">
             <CardHeader>
               <CardTitle className="flex items-center gap-2">
                 <ShoppingCart className="w-5 h-5" />
@@ -617,11 +669,46 @@ export default function FrameFinderDemo() {
               </div>
             </CardContent>
           </Card>
+          <div className="lg:order-1 hidden lg:block">
+            <div className="bg-white rounded-lg p-6 shadow-lg">
+              <h2 className="text-2xl font-semibold mb-6">Order Summary</h2>
+              <div className="space-y-4">
+                <div className="flex items-center gap-4 p-4 bg-gray-50 rounded-lg">
+                  {selectedFrame && (
+                    <>
+                      <img
+                        src={selectedFrame.image || "/placeholder.svg"}
+                        alt={selectedFrame.name}
+                        className="w-20 h-16 object-cover rounded"
+                      />
+                      <div>
+                        <h3 className="font-medium">{selectedFrame.name}</h3>
+                        <p className="text-sm text-gray-600">Perfect match for your style</p>
+                        <p className="font-semibold">RM{selectedFrame.price}</p>
+                      </div>
+                    </>
+                  )}
+                </div>
+                <div className="border-t pt-4">
+                  <h3 className="font-medium mb-3">What's included:</h3>
+                  <ul className="text-sm text-gray-600 space-y-1">
+                    <li>✓ Premium eyewear frames</li>
+                    <li>✓ Free prescription lenses (basic)</li>
+                    <li>✓ Protective case</li>
+                    <li>✓ Cleaning cloth</li>
+                    <li>✓ Free 2-day shipping</li>
+                    <li>✓ 30-day return policy</li>
+                  </ul>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
         )}
 
         {/* Step 7: Feedback */}
         {currentStep === "feedback" && (
-          <Card>
+          <Card className="md:max-w-2xl md:mx-auto">
             <CardHeader>
               <CardTitle>🎉 Thanks for your feedback!</CardTitle>
             </CardHeader>
@@ -645,13 +732,23 @@ export default function FrameFinderDemo() {
         )}
 
         {/* Demo Controls */}
-        <div className="mt-6 text-center">
-          <p className="text-xs text-gray-500 mb-2">
-            💡 This is a 100% client-side demo. Click blue buttons to navigate.
-          </p>
-          <Button variant="outline" size="sm" onClick={resetDemo}>
-            Reset Demo
-          </Button>
+        <div className="mt-6 md:mt-12 text-center">
+          <div className="bg-white/70 backdrop-blur-sm rounded-xl p-4 md:p-6 max-w-2xl mx-auto">
+            <p className="text-xs md:text-sm text-gray-500 mb-3 md:mb-4">
+              💡 This is a 100% client-side demo showcasing AI-powered eyewear recommendations
+            </p>
+            <div className="flex flex-col sm:flex-row gap-3 justify-center items-center">
+              <Button variant="outline" size="sm" onClick={resetDemo} className="min-w-[120px]">
+                Reset Demo
+              </Button>
+              <div className="hidden md:flex items-center gap-4 text-xs text-gray-400">
+                <span>✓ Next.js 15</span>
+                <span>✓ Tailwind CSS</span>
+                <span>✓ TypeScript</span>
+                <span>✓ Responsive Design</span>
+              </div>
+            </div>
+          </div>
         </div>
       </div>
     </div>
