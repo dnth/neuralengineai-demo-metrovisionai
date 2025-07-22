@@ -2,7 +2,7 @@
 
 import React, { useRef, useEffect, useState } from 'react'
 import { Button } from '@/components/ui/button'
-import { ArrowLeft } from 'lucide-react'
+import { ArrowLeft, Camera } from 'lucide-react'
 
 // Dynamic import to handle library loading safely
 let JEELIZVTOWIDGET: any = null
@@ -128,6 +128,42 @@ export default function VTOWidget({ selectedFrame, onBack, onAddToCart }: VTOWid
       }
     } catch (error) {
       console.error('Error loading glasses model:', error)
+    }
+  }
+
+  const captureSnapshot = () => {
+    if (!isInitialized || !refCanvas.current) {
+      console.warn('VTO Widget not ready for snapshot')
+      return
+    }
+    
+    try {
+      const canvas = refCanvas.current
+      // Create a temporary canvas to capture the current frame
+      const tempCanvas = document.createElement('canvas')
+      tempCanvas.width = canvas.width
+      tempCanvas.height = canvas.height
+      const tempCtx = tempCanvas.getContext('2d')
+      
+      if (tempCtx) {
+        tempCtx.drawImage(canvas, 0, 0)
+        
+        // Convert to blob and download
+        tempCanvas.toBlob((blob) => {
+          if (blob) {
+            const url = URL.createObjectURL(blob)
+            const link = document.createElement('a')
+            link.href = url
+            link.download = `virtual-tryout-${selectedFrame?.name || 'frame'}-${new Date().toISOString().split('T')[0]}.png`
+            document.body.appendChild(link)
+            link.click()
+            document.body.removeChild(link)
+            URL.revokeObjectURL(url)
+          }
+        }, 'image/png', 0.9)
+      }
+    } catch (error) {
+      console.error('Error capturing snapshot:', error)
     }
   }
 
@@ -378,30 +414,54 @@ export default function VTOWidget({ selectedFrame, onBack, onAddToCart }: VTOWid
           </div>
         )}
         
-        {/* Adjust Button */}
-        <div ref={refAdjustEnter} className={`JeelizVTOWidgetControls absolute top-4 right-4 z-10 ${!isInitialized || hasError ? 'hidden' : ''}`}>
-          <Button 
-            onClick={enter_adjustMode}
-            variant="secondary"
-            size="sm"
-            className="bg-black/50 hover:bg-black/70 text-white border-0"
-            disabled={!isInitialized}
-          >
-            Adjust Fit
-          </Button>
+        {/* Top Controls */}
+        <div ref={refAdjustEnter} className={`JeelizVTOWidgetControls absolute top-4 left-4 right-4 z-10 ${!isInitialized || hasError ? 'hidden' : ''}`}>
+          <div className="flex justify-between items-center">
+            <Button 
+              onClick={captureSnapshot}
+              variant="secondary"
+              size="sm"
+              className="bg-green-500/70 hover:bg-green-600/80 text-white border-0"
+              disabled={!isInitialized}
+            >
+              <Camera className="w-4 h-4 mr-2" />
+              Snapshot
+            </Button>
+            <Button 
+              onClick={enter_adjustMode}
+              variant="secondary"
+              size="sm"
+              className="bg-black/50 hover:bg-black/70 text-white border-0"
+              disabled={!isInitialized}
+            >
+              Adjust Fit
+            </Button>
+          </div>
         </div>
 
         {/* Adjust Mode Notice */}
         <div ref={refAdjust} className="JeelizVTOWidgetAdjustNotice absolute inset-0 bg-black/70 text-white flex flex-col items-center justify-center text-center p-4" style={{display: 'none'}}>
           <p className="mb-4">Move the glasses to adjust their position and fit</p>
-          <Button 
-            onClick={exit_adjustMode}
-            variant="secondary"
-            size="sm"
-            className="bg-white/20 hover:bg-white/30 text-white border-0"
-          >
-            Done Adjusting
-          </Button>
+          <div className="flex gap-3">
+            <Button 
+              onClick={captureSnapshot}
+              variant="secondary"
+              size="sm"
+              className="bg-green-500/70 hover:bg-green-600/80 text-white border-0"
+              disabled={!isInitialized}
+            >
+              <Camera className="w-4 h-4 mr-2" />
+              Snapshot
+            </Button>
+            <Button 
+              onClick={exit_adjustMode}
+              variant="secondary"
+              size="sm"
+              className="bg-white/20 hover:bg-white/30 text-white border-0"
+            >
+              Done Adjusting
+            </Button>
+          </div>
         </div>
 
         {/* Model Selection */}
